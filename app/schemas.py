@@ -1,0 +1,212 @@
+from pydantic import BaseModel, EmailStr
+from typing import Optional
+
+
+# ============================================================
+# ======================= USER ================================
+# ============================================================
+
+class UserBase(BaseModel):
+    username: str
+    email: EmailStr
+
+
+class UserCreate(UserBase):
+    hashed_password: str
+
+
+class UserUpdate(BaseModel):
+    username: str
+    email: EmailStr
+    hashed_password: str
+
+
+class UserUpdatePartial(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    hashed_password: Optional[str] = None
+
+
+class User(UserBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+# ============================================================
+# ======================= CATEGORY ============================
+# ============================================================
+
+class CategoryBase(BaseModel):
+    name: str
+
+
+class CategoryCreate(CategoryBase):
+    pass
+
+
+class CategoryUpdate(CategoryBase):
+    pass
+
+
+class CategoryUpdatePartial(BaseModel):
+    name: Optional[str] = None
+
+
+class Category(CategoryBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+# ============================================================
+# ======================= COURSE ==============================
+# ============================================================
+
+class CourseBase(BaseModel):
+    name: str
+    file_format: str
+    description: str
+    price: float
+    duration: int
+    rating: float
+    category_id: int
+
+
+class CourseCreate(CourseBase):
+    pass
+
+
+class CourseUpdate(CourseBase):
+    pass
+
+
+class CourseUpdatePartial(BaseModel):
+    name: Optional[str] = None
+    file_format: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = None
+    duration: Optional[int] = None
+    rating: Optional[float] = None
+    category_id: Optional[int] = None
+
+
+class Course(CourseBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+# ============================================================
+# ========================= CART ==============================
+# ============================================================
+
+class CartBase(BaseModel):
+    user_id: int
+    course_id: int
+
+
+class CartCreate(CartBase):
+    pass
+
+
+class CartUpdate(CartBase):
+    pass
+
+
+class CartUpdatePartial(BaseModel):
+    user_id: Optional[int] = None
+    course_id: Optional[int] = None
+
+
+class Cart(CartBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+# ============================================================
+# ===================== BOUGHT COURSE =========================
+# ============================================================
+
+class BoughtCourseBase(BaseModel):
+    user_id: int
+    course_id: int
+
+
+class BoughtCourseCreate(BoughtCourseBase):
+    pass
+
+
+class BoughtCourseUpdate(BoughtCourseBase):
+    pass
+
+
+class BoughtCourseUpdatePartial(BaseModel):
+    user_id: Optional[int] = None
+    course_id: Optional[int] = None
+
+
+class BoughtCourse(BoughtCourseBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+# ============================================================
+# ======================= COMMENT =============================
+# ============================================================
+
+class CommentBase(BaseModel):
+    user_id: int
+    course_id: int
+    text: str
+    rating: int
+
+
+class CommentCreate(CommentBase):
+    pass
+
+
+class CommentUpdate(CommentBase):
+    pass
+
+
+class CommentUpdatePartial(BaseModel):
+    user_id: Optional[int] = None
+    course_id: Optional[int] = None
+    text: Optional[str] = None
+    rating: Optional[int] = None
+
+
+class Comment(CommentBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+
+class UserOut(BaseModel):
+    id: int
+    username: str
+
+    class Config:
+        orm_mode = True
+
+
