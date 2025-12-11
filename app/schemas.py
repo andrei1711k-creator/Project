@@ -1,42 +1,41 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 
+from pydantic import BaseModel, EmailStr
+from typing import Optional
 
-# ============================================================
-# ======================= USER ================================
-# ============================================================
 
 class UserBase(BaseModel):
     username: str
     email: EmailStr
 
 
+
 class UserCreate(UserBase):
-    hashed_password: str
+    password: str
 
 
 class UserUpdate(BaseModel):
     username: str
     email: EmailStr
-    hashed_password: str
+    password: str
+    avatar_url: Optional[str] = None
 
 
 class UserUpdatePartial(BaseModel):
     username: Optional[str] = None
     email: Optional[EmailStr] = None
-    hashed_password: Optional[str] = None
+    password: Optional[str] = None
+    avatar_url: Optional[str] = None
 
 
 class User(UserBase):
     id: int
+    avatar_url: Optional[str] = None
 
     class Config:
         from_attributes = True
 
-
-# ============================================================
-# ======================= CATEGORY ============================
-# ============================================================
 
 class CategoryBase(BaseModel):
     name: str
