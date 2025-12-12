@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, ForeignKey, Text, DateTime
+from sqlalchemy import String, Integer, ForeignKey, Text, DateTime,Float
 from datetime import datetime
 from app.db_helper import db_helper
 
@@ -56,7 +56,7 @@ class Course(Base):
     description: Mapped[str] = mapped_column(Text)
     price: Mapped[int] = mapped_column(Integer)
     duration_hours: Mapped[int] = mapped_column(Integer)
-    rating: Mapped[float] = mapped_column(Integer, default=0)
+    rating: Mapped[float] = mapped_column(Float,default=0)
     purchased_count: Mapped[int] = mapped_column(Integer, default=0)
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
@@ -97,6 +97,7 @@ class Comment(Base):
     course_id: Mapped[int] = mapped_column(ForeignKey("courses.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     content: Mapped[str] = mapped_column(Text)
+    rating: Mapped[float] = mapped_column(Float,default=0)
 
     user = relationship("User", back_populates="comments")
     course = relationship("Course", back_populates="comments")

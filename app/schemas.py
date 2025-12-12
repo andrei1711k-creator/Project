@@ -59,17 +59,12 @@ class Category(CategoryBase):
     class Config:
         from_attributes = True
 
-
-# ============================================================
-# ======================= COURSE ==============================
-# ============================================================
-
 class CourseBase(BaseModel):
-    name: str
-    file_format: str
+    title: str
+    format: str
     description: str
     price: float
-    duration: int
+    duration_hours: int
     rating: float
     category_id: int
 
@@ -83,11 +78,11 @@ class CourseUpdate(CourseBase):
 
 
 class CourseUpdatePartial(BaseModel):
-    name: Optional[str] = None
-    file_format: Optional[str] = None
+    title: Optional[str] = None
+    format: Optional[str] = None
     description: Optional[str] = None
     price: Optional[float] = None
-    duration: Optional[int] = None
+    duration_hours: Optional[int] = None
     rating: Optional[float] = None
     category_id: Optional[int] = None
 
@@ -164,7 +159,7 @@ class BoughtCourse(BoughtCourseBase):
 class CommentBase(BaseModel):
     user_id: int
     course_id: int
-    text: str
+    content: str
     rating: int
 
 
@@ -179,7 +174,7 @@ class CommentUpdate(CommentBase):
 class CommentUpdatePartial(BaseModel):
     user_id: Optional[int] = None
     course_id: Optional[int] = None
-    text: Optional[str] = None
+    content: Optional[str] = None
     rating: Optional[int] = None
 
 
