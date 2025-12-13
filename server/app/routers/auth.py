@@ -4,10 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import timedelta, datetime
 from jose import jwt
 from sqlalchemy import select
-from app.models import User, pwd_context
+from server.app.models import User, pwd_context
 
-import app.db_helper as db_helper
-from app.schemas import UserLogin, UserOut
+import server.app.db_helper as db_helper
+from server.app.schemas import UserLogin, UserOut
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

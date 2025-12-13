@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app import crud, schemas
-from app.database import async_session_maker
-from app.crud import cart_items
+from server.app import crud, schemas
+from server.app.database import async_session_maker
+from server.app.crud import cart_items
 router = APIRouter(prefix="/cart", tags=["Cart Items"])
 
 

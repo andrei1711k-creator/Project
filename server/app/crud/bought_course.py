@@ -1,7 +1,7 @@
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
-from app import models, schemas
+from server.app import models, schemas
 
 
 # CREATE

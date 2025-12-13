@@ -4,7 +4,7 @@ from sqlalchemy.engine import Result
 
 from passlib.context import CryptContext
 
-from app import models, schemas
+from server.app import models, schemas
 
 pwd_context = CryptContext(schemes=["bcrypt_sha256"], deprecated="auto")
 
