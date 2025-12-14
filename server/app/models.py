@@ -2,22 +2,14 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Integer, ForeignKey, Text, DateTime,Float
 from datetime import datetime
 from server.app.db_helper import db_helper
-
+from server.app.security import verify_password
 
 from sqlalchemy.orm import DeclarativeBase
 
 class Base(DeclarativeBase):
     pass
 
-from passlib.context import CryptContext
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
 
 
 class User(Base):
@@ -33,9 +25,9 @@ class User(Base):
     bought_courses = relationship("BoughtCourse", back_populates="user")
     cart_items = relationship("Cart", back_populates="user")
 
-    def verify_password(self, password: str):
-        return pwd_context.verify(password, self.hashed_password)
+    def verify_password(self, password: str) -> bool:
 
+        return verify_password(password, self.hashed_password)
 
 
 class Category(Base):
