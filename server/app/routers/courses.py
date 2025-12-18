@@ -31,6 +31,13 @@ async def read_courses(
     return courses_list[skip:skip + limit]
 
 
+@router.get("/{category_id}", response_model=schemas.Course)
+async def read_course_by_category_id(category_id: int, session: AsyncSession = Depends(get_db)):
+    db_course = await crud_courses. get_course_by_category(session, category_id=category_id)
+    if db_course is None:
+        raise HTTPException(status_code=404, detail=f"Course {category_id} not found")
+    return db_course
+
 @router.get("/{course_id}", response_model=schemas.Course)
 async def read_course(course_id: int, session: AsyncSession = Depends(get_db)):
     db_course = await crud_courses.get_course(session, course_id)

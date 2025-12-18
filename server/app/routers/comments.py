@@ -17,6 +17,7 @@ async def get_db():
 async def create_comment(
     comment: schemas.CommentCreate,
     session: AsyncSession = Depends(get_db)
+
 ):
     return await crud_comments.create_comment(session, comment)
 
