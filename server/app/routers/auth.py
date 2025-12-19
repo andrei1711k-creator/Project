@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import timedelta, datetime
 from jose import jwt
 from sqlalchemy import select
-from app.models import User, pwd_context
 
+from app.models import User, pwd_context
 import app.db_helper as db_helper
 from app.schemas import UserLogin, UserOut
 
@@ -14,8 +14,6 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 SECRET_KEY = "super_secret_key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-
 
 
 async def authenticate_user(session: AsyncSession, username: str, password: str):
@@ -64,20 +62,39 @@ async def register_user(
 
 @router.post("/login")
 async def login(
+    response: Response,
     form_data: OAuth2PasswordRequestForm = Depends(),
-    session: AsyncSession = Depends(db_helper.db_helper.session_dependency)
+    session: AsyncSession = Depends(db_helper.db_helper.session_dependency),
 ):
     user = await authenticate_user(session, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
         )
 
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": str(user.id)}, expires_delta=access_token_expires
+        data={"sub": str(user.id)},
+        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     )
 
-    return {"access_token": access_token, "token_type": "bearer"}
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,      # ❗ JS не может прочитать
+        secure=False,       # True в production (HTTPS)
+        samesite="lax",
+        max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+    )
+
+    return {"message": "Login successful"}
+
+@router.post("/logout", status_code=status.HTTP_200_OK)
+async def logout(response: Response):
+    response.delete_cookie(
+        key="access_token",
+        httponly=True,
+        samesite="lax",
+        secure=False,  # True в production
+    )
+    return {"message": "Logout successful"}
