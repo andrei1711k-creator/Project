@@ -1,16 +1,21 @@
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
-from app import models, schemas
+from server.app import models, schemas
 
 
 # CREATE
 async def create_comment(session: AsyncSession, data: schemas.CommentCreate) -> models.Comment:
+
     db_obj = models.Comment(**data.dict())
+
     session.add(db_obj)
+
     await session.commit()
     await session.refresh(db_obj)
     return db_obj
+
+
 
 
 # READ one

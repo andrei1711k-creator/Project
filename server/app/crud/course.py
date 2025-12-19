@@ -1,7 +1,7 @@
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
-from app import models, schemas
+from server.app import models, schemas
 
 
 # CREATE
@@ -19,6 +19,10 @@ async def get_course(session: AsyncSession, course_id: int) -> models.Course | N
     result: Result = await session.execute(stmt)
     return result.scalar_one_or_none()
 
+async def get_course_by_category(session: AsyncSession, category_id: int) ->list[models.Course]:
+    stmt = select(models.Course).where(models.Course.category_id == category_id)
+    result: Result = await session.execute(stmt)
+    return result.scalar_one_or_none()
 
 # READ all
 async def get_courses(session: AsyncSession) -> list[models.Course]:

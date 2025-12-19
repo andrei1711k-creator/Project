@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app import schemas
-from app.database import async_session_maker
-from app.crud import bought_course as crud_bought_courses
+from server.app import schemas
+from server.app.database import async_session_maker
+from server.app.crud import bought_course as crud_bought_courses
 
 router = APIRouter(prefix="/bought-courses", tags=["Bought Courses"])
 

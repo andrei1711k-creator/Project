@@ -2,13 +2,13 @@ from fastapi import FastAPI
 import uvicorn
 
 
-from app.routers.comments import router as comment_router
-from app.routers.bought_courses import router as bought_courses_router
-from app.routers.cart import router as cart_router
-from app.routers.users import router as users_router
-from app.routers.auth import router as auth_router
-from app.routers.courses import router as courses_router
-from app.routers.categories import router as categories_router
+from .app.routers.comments import router as comment_router
+from .app.routers.bought_courses import router as bought_courses_router
+from .app.routers.cart import router as cart_router
+from .app.routers.users import router as users_router
+from .app.routers.auth import router as auth_router
+from .app.routers.courses import router as courses_router
+from .app.routers.categories import router as categories_router
 app = FastAPI()
 
 app.include_router(categories_router)

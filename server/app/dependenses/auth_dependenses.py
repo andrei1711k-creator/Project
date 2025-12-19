@@ -3,9 +3,9 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-import app.db_helper as db_helper
-from app.models import  User
-from app.security import SECRET_KEY, ALGORITHM
+import server.app.db_helper as db_helper
+from server.app.models import  User
+from server.app.security import SECRET_KEY, ALGORITHM
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 

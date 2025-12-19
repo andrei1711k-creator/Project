@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app import schemas
-from app.database import async_session_maker
-from app.crud import comment as crud_comments
+from server.app import schemas
+from server.app.database import async_session_maker
+from server.app.crud import comment as crud_comments
 
 router = APIRouter(prefix="/comments", tags=["Comments"])
 
@@ -17,6 +17,7 @@ async def get_db():
 async def create_comment(
     comment: schemas.CommentCreate,
     session: AsyncSession = Depends(get_db)
+
 ):
     return await crud_comments.create_comment(session, comment)
 

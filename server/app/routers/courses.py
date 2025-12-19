@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app import schemas
-from app.database import async_session_maker
-from app.crud import course as crud_courses
+from server.app import schemas
+from server.app.database import async_session_maker
+from server.app.crud import course as crud_courses
 
 router = APIRouter(prefix="/courses", tags=["Courses"])
 
@@ -30,6 +30,13 @@ async def read_courses(
     courses_list = await crud_courses.get_courses(session)
     return courses_list[skip:skip + limit]
 
+
+@router.get("/{category_id}", response_model=schemas.Course)
+async def read_course_by_category_id(category_id: int, session: AsyncSession = Depends(get_db)):
+    db_course = await crud_courses. get_course_by_category(session, category_id=category_id)
+    if db_course is None:
+        raise HTTPException(status_code=404, detail=f"Course {category_id} not found")
+    return db_course
 
 @router.get("/{course_id}", response_model=schemas.Course)
 async def read_course(course_id: int, session: AsyncSession = Depends(get_db)):
