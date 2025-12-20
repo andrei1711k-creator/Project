@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.routers.auth import router as auth_router
 import uvicorn
 
 
@@ -10,6 +12,14 @@ from .app.routers.auth import router as auth_router
 from .app.routers.courses import router as courses_router
 from .app.routers.categories import router as categories_router
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # адрес фронтенда
+    allow_credentials=True,                   # важно для HttpOnly cookie
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(categories_router)
 app.include_router(cart_router)

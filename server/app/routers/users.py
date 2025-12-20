@@ -1,16 +1,45 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+# app/routers/users.py
+from fastapi import APIRouter, Depends, HTTPException, status, Cookie
 from sqlalchemy.ext.asyncio import AsyncSession
+from jose import jwt, JWTError
+
 from server.app import schemas
 from server.app.database import async_session_maker
 from server.app.crud import users as crud_users
 
+SECRET_KEY = "super_secret_key"
+ALGORITHM = "HS256"
+
 router = APIRouter(prefix="/users", tags=["Users"])
 
-
+# ---------- Dependency для работы с БД ----------
 async def get_db():
     async with async_session_maker() as session:
         yield session
 
+# ---------- Dependency для текущего пользователя ----------
+async def get_current_user(
+    access_token: str = Cookie(None),
+    session: AsyncSession = Depends(get_db)
+):
+    if not access_token:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated")
+    
+    try:
+        payload = jwt.decode(access_token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: int = int(payload.get("sub"))
+        if user_id is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+
+    db_user = await crud_users.get_user(session, user_id=user_id)
+    if db_user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    
+    return db_user
+
+# ---------- CRUD роуты ----------
 
 @router.post("/", response_model=schemas.User, status_code=status.HTTP_201_CREATED)
 async def create_user(user: schemas.UserCreate, session: AsyncSession = Depends(get_db)):
@@ -33,6 +62,11 @@ async def read_users(
 ):
     users_list = await crud_users.get_users(session)
     return users_list[skip:skip + limit]
+
+# ---------- Новый маршрут /me ----------
+@router.get("/me", response_model=schemas.User)
+async def read_current_user(current_user=Depends(get_current_user)):
+    return current_user
 
 
 @router.get("/{user_id}", response_model=schemas.User)
@@ -89,3 +123,4 @@ async def delete_user(user_id: int, session: AsyncSession = Depends(get_db)):
     if not deleted:
         raise HTTPException(status_code=404, detail=f"User {user_id} not found")
     return None
+
