@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from datetime import timedelta
+from datetime import timedelta, datetime
+from jose import jwt
 
 from server.app.models import User
 from server.app.schemas import UserRegister, UserOut, Token
@@ -62,8 +63,9 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     session: AsyncSession = Depends(db_helper.session_dependency),
 ):
-    stmt = select(User).where(User.username == form_data.username)
-    result = await session.execute(stmt)
+    result = await session.execute(
+        select(User).where(User.username == form_data.username)
+    )
     user = result.scalar_one_or_none()
 
     if not user or not user.verify_password(form_data.password):
@@ -80,13 +82,17 @@ async def login(
     response.set_cookie(
         key="access_token",
         value=access_token,
-        httponly=True,      # ❗ JS не может прочитать
-        secure=False,       # True в production (HTTPS)
+        httponly=True,
+        secure=False,          # True в production (HTTPS)
         samesite="lax",
         max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        path="/",              # важно
     )
 
-    return {"message": "Login successful"}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }
 
 @router.post("/logout", status_code=status.HTTP_200_OK)
 async def logout(response: Response):

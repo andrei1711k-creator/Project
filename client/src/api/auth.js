@@ -8,12 +8,14 @@ export const login = async (username, password) => {
   await api.post("/auth/login", formData);
 };
 
-export const register = async (username, password) => {
+export const register = async (username, email, password) => {
   await api.post("/auth/register", {
     username,
+    email,
     password,
   });
 };
+
 
 export const logout = async () => {
   await api.post("/auth/logout");
