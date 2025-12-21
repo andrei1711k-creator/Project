@@ -14,7 +14,7 @@ const Login = () => {
     }, [])
 
     useEffect(() => {
-        setErrMsg('')''
+        setErrMsg('')
     })
 
     return (

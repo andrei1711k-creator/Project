@@ -94,34 +94,27 @@ class Course(CourseBase):
         from_attributes = True
 
 
-# ============================================================
-# ========================= CART ==============================
-# ============================================================
-
-class CartBase(BaseModel):
-    user_id: int
-    course_id: int
-
-
-class CartCreate(CartBase):
-    pass
-
-
-class CartUpdate(CartBase):
-    pass
-
-
-class CartUpdatePartial(BaseModel):
-    user_id: Optional[int] = None
-    course_id: Optional[int] = None
-
-
-class Cart(CartBase):
+class CourseShort(BaseModel):
     id: int
+    title: str
+    price: int
 
     class Config:
         from_attributes = True
 
+
+# ================== CART ==================
+
+class CartCreate(BaseModel):
+    course_id: int
+
+
+class Cart(BaseModel):
+    id: int
+    course: CourseShort  # 🔥 возвращаем данные курса
+
+    class Config:
+        from_attributes = True
 
 # ============================================================
 # ===================== BOUGHT COURSE =========================
