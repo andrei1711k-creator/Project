@@ -42,12 +42,12 @@ button:active {
 
 /* Центрирование карточки */
 .profile {
-  min-height: 100vh;
+  min-height: 90vh;
   min-width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   background: linear-gradient(135deg, #8fffeb, #203886);
   padding-top: 50px;
@@ -56,7 +56,7 @@ button:active {
 
 .container{
   min-width: 85%;
-  margin: auto;
+  margin: 30px auto;
 }
 
 .profile h2 {

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import { useCart } from "../auth/CartContext";
+import "../css/links.css"
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -24,7 +25,7 @@ export default function Header() {
               Cart {count > 0 && `(${count})`}
             </Link>
             <Link to="/profile">{user.username}</Link>
-            <button onClick={logout}>Logout</button>
+            <button  onClick={logout}>Logout</button>
           </>
         )}
       </nav>

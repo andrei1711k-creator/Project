@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useCart } from "../auth/CartContext";
 import { useAuth } from "../auth/AuthContext";
 import { addToCart } from "../api/cart";
+import "../css/card.css";
+// import Img from "../images/courseIcon.svg"; 
 
 export default function CourseCard({ course }) {
   const { user } = useAuth();
@@ -48,7 +50,7 @@ export default function CourseCard({ course }) {
   };
 
   return (
-    <div style={styles.card}>
+    <div className="card" style={styles.card}>
       <h3>{course.title}</h3>
       <p>{course.description}</p>
 
@@ -65,7 +67,7 @@ export default function CourseCard({ course }) {
 const styles = {
   card: {
     border: "1px solid #e5e5e5",
-    borderRadius: "8px",
+    borderRadius: "16px",
     padding: "16px",
     display: "flex",
     flexDirection: "column",
