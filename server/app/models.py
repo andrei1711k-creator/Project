@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, ForeignKey, Text, DateTime,Float
+from sqlalchemy import String, Integer, ForeignKey, Text, DateTime,Float, UniqueConstraint
 from datetime import datetime
 from server.app.db_helper import db_helper
 from server.app.security import verify_password
@@ -57,6 +57,7 @@ class Course(Base):
     comments = relationship("Comment", back_populates="course")
 
 
+
 class Cart(Base):
     __tablename__ = "cart"
 
@@ -66,6 +67,10 @@ class Cart(Base):
 
     user = relationship("User", back_populates="cart_items")
     course = relationship("Course")
+
+    __table_args__ = (
+        UniqueConstraint("user_id", "course_id", name="uq_user_course_cart"),
+    )
 
 
 
