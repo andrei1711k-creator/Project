@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getCourses } from "../api/courses";
 import Header from "../components/Header";
 import CourseCard from "../components/CourseCard";
+import "../css/home.css";
 
 export default function Home() {
   const [courses, setCourses] = useState([]);

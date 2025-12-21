@@ -1,0 +1,23 @@
+div.card{
+    background-color: rgba(209, 219, 255, 0.953);
+    transition: transform 0.3s ease;
+    color: rgb(48, 54, 59);
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+h1{
+    color:rgba(44, 44, 44, 0.903);
+}
+
+div.card:hover{
+    transform: scale(1.1); 
+}
+
+div.card button{
+    transition: transform 0.3s ease;
+    background-color: rgba(21, 47, 198, 0.953);
+}
+
+div.card button:hover{
+    color: rgb(114, 164, 255);
+}

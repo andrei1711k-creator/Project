@@ -1,0 +1,13 @@
+.cart-wrap {
+  min-height: 100vh;
+  background-color: rgb(221, 234, 255);
+  color: rgba(0, 87, 162, 0.814);
+  text-align: center;
+}
+
+div.cart-wrap div.item {
+  border: 2px solid rgb(0, 0, 0);
+  background-color: rgba(161, 182, 255, 0.953);
+  max-width: 70%;
+  margin: auto;
+}

@@ -1,5 +1,6 @@
 import Header from "../components/Header";
 import { useCart } from "../auth/CartContext";
+import "../css/cart.css";
 
 export default function Cart() {
   const { items, loading, removeItem } = useCart();
@@ -8,7 +9,7 @@ export default function Cart() {
     <>
       <Header />
 
-      <div style={{ padding: "32px", maxWidth: "800px", margin: "0 auto" }}>
+      <div className="cart-wrap" style={{ padding: "32px", maxWidth: "100%", margin: "0 auto" }}>
         <h2>Корзина</h2>
 
         {loading ? (
@@ -17,10 +18,10 @@ export default function Cart() {
           <p>Корзина пуста</p>
         ) : (
           items.map((item) => (
-            <div
+            <div className="item"
               key={item.id}
               style={{
-                border: "1px solid #e5e5e5",
+                border: "3px solid #002d7a2e",
                 borderRadius: "8px",
                 padding: "16px",
                 marginBottom: "12px",
@@ -41,7 +42,7 @@ export default function Cart() {
               <button
                 onClick={() => removeItem(item.id)}
                 style={{
-                  background: "#ff4d4f",
+                  background: "#ca3030ff",
                   color: "#fff",
                   border: "none",
                   borderRadius: "4px",

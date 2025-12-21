@@ -1,0 +1,7 @@
+nav a{
+    color:rgba(220, 222, 255, 0.903);   
+}
+
+button:hover{
+    color:rgba(220, 222, 255, 0.745);
+}
