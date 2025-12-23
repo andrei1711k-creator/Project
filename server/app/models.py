@@ -3,6 +3,7 @@ from sqlalchemy import String, Integer, ForeignKey, Text, DateTime,Float, Unique
 from datetime import datetime
 from server.app.db_helper import db_helper
 from server.app.security import verify_password
+from sqlalchemy import Column, String
 
 from sqlalchemy.orm import DeclarativeBase
 
@@ -55,6 +56,11 @@ class Course(Base):
     category = relationship("Category", back_populates="courses")
 
     comments = relationship("Comment", back_populates="course")
+    image_url = Column(
+    String,
+    nullable=False,
+    default="/static/images/courses/default.png"
+)
 
 
 

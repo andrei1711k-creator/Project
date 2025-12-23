@@ -50,18 +50,24 @@ export default function CourseCard({ course }) {
   };
 
   return (
-    <div className="card" style={styles.card}>
-      <h3>{course.title}</h3>
-      <p>{course.description}</p>
+  <div className="card" style={styles.card}>
+    <img
+      src={`http://localhost:8000${course.image_url}`}
+      alt={course.title}
+      style={styles.image}
+    />
 
-      <div style={styles.footer}>
-        <span>{course.price} ₽</span>
-        <button onClick={handleBuy} disabled={loading || isInCart}>
-          {isInCart ? "В корзине" : loading ? "Добавление..." : "Купить"}
-        </button>
-      </div>
+    <h3>{course.title}</h3>
+    <p>{course.description}</p>
+
+    <div style={styles.footer}>
+      <span>{course.price} ₽</span>
+      <button onClick={handleBuy} disabled={loading || isInCart}>
+        {isInCart ? "В корзине" : loading ? "Добавление..." : "Купить"}
+      </button>
     </div>
-  );
+  </div>
+);
 }
 
 const styles = {
@@ -78,4 +84,11 @@ const styles = {
     justifyContent: "space-between",
     marginTop: "16px",
   },
+  image: {
+  width: "100%",
+  height: "180px",
+  objectFit: "cover",
+  borderRadius: "12px",
+  marginBottom: "12px",
+},
 };
