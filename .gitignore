@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+venv/
+
+# IDE
+.idea/
+.vscode/
+
+# DB
+*.db
+
+# Tests cache
+.pytest_cache/
