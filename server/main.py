@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from server.app.routers.auth import router as auth_router
 import uvicorn
 
-
+from fastapi.staticfiles import StaticFiles
 from server.app.routers.comments import router as comment_router
 from server.app.routers.bought_courses import router as bought_courses_router
 from server.app.routers.cart import router as cart_router
@@ -11,8 +11,13 @@ from server.app.routers.users import router as users_router
 from server.app.routers.auth import router as auth_router
 from server.app.routers.courses import router as courses_router
 from server.app.routers.categories import router as categories_router
-app = FastAPI()
 
+app = FastAPI()
+app.mount(
+    "/static",
+    StaticFiles(directory="server/static"),
+    name="static"
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # адрес фронтенда

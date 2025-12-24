@@ -67,6 +67,7 @@ class CourseBase(BaseModel):
     duration_hours: int
     rating: float
     category_id: int
+    image_url : str
 
 
 class CourseCreate(CourseBase):
@@ -85,7 +86,7 @@ class CourseUpdatePartial(BaseModel):
     duration_hours: Optional[int] = None
     rating: Optional[float] = None
     category_id: Optional[int] = None
-
+    image_url : str
 
 class Course(CourseBase):
     id: int
