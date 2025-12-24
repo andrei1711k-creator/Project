@@ -3,8 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
 from server.app import models, schemas
 
-
-# CREATE
 async def create_bought_course(session: AsyncSession, data: schemas.BoughtCourseCreate) -> models.BoughtCourse:
     db_obj = models.BoughtCourse(**data.dict())
     session.add(db_obj)
@@ -19,22 +17,16 @@ async def create_bought_course(session: AsyncSession, data: schemas.BoughtCourse
     await session.refresh(db_obj)
     return db_obj
 
-
-# READ one
 async def get_bought_course(session: AsyncSession, bought_id: int):
     stmt = select(models.BoughtCourse).where(models.BoughtCourse.id == bought_id)
     result: Result = await session.execute(stmt)
     return result.scalar_one_or_none()
 
-
-# READ all for user
 async def get_user_bought_courses(session: AsyncSession, user_id: int):
     stmt = select(models.BoughtCourse).where(models.BoughtCourse.user_id == user_id)
     result: Result = await session.execute(stmt)
     return list(result.scalars().all())
 
-
-# UPDATE
 async def update_bought_course(
     session: AsyncSession,
     bought_id: int,
@@ -57,8 +49,6 @@ async def update_bought_course(
     await session.refresh(db_obj)
     return db_obj
 
-
-# DELETE
 async def delete_bought_course(session: AsyncSession, bought_id: int) -> bool:
     stmt = delete(models.BoughtCourse).where(models.BoughtCourse.id == bought_id)
     result = await session.execute(stmt)

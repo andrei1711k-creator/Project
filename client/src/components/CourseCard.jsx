@@ -3,7 +3,6 @@ import { useCart } from "../auth/CartContext";
 import { useAuth } from "../auth/AuthContext";
 import { addToCart } from "../api/cart";
 import "../css/card.css";
-// import Img from "../images/courseIcon.svg"; 
 
 export default function CourseCard({ course }) {
   const { user } = useAuth();

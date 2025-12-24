@@ -4,8 +4,6 @@ from sqlalchemy.orm import selectinload
 
 from server.app import models
 
-
-# ADD TO CART
 async def add_to_cart(
     session: AsyncSession,
     user_id: int,
@@ -26,7 +24,6 @@ async def add_to_cart(
     return result.scalar_one()
 
 
-# GET ONE
 async def get_cart_item(session: AsyncSession, cart_id: int):
     result = await session.execute(
         select(models.Cart)
@@ -35,8 +32,6 @@ async def get_cart_item(session: AsyncSession, cart_id: int):
     )
     return result.scalar_one_or_none()
 
-
-# GET ALL USER CART (🔥 JOIN COURSE)
 async def get_user_cart(session: AsyncSession, user_id: int):
     result = await session.execute(
         select(models.Cart)
@@ -45,16 +40,12 @@ async def get_user_cart(session: AsyncSession, user_id: int):
     )
     return result.scalars().all()
 
-
-# DELETE ONE
 async def delete_cart_item(session: AsyncSession, cart_id: int) -> None:
     await session.execute(
         delete(models.Cart).where(models.Cart.id == cart_id)
     )
     await session.commit()
 
-
-# 🔥 CLEAR USER CART (для оплаты)
 async def clear_user_cart(session: AsyncSession, user_id: int) -> None:
     await session.execute(
         delete(models.Cart).where(models.Cart.user_id == user_id)
