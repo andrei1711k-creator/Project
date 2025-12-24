@@ -15,13 +15,13 @@ from server.app.routers.categories import router as categories_router
 app = FastAPI()
 app.mount(
     "/static",
-    StaticFiles(directory="server/static"),
+    StaticFiles(directory="static"),
     name="static"
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # адрес фронтенда
-    allow_credentials=True,                   # важно для HttpOnly cookie
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
