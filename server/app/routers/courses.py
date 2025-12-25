@@ -1,10 +1,11 @@
-from typing import List
+from typing import List, Optional
 from fastapi import UploadFile, File, Form
 from pathlib import Path
 import uuid
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import and_
 from server.app import models
 from server.app.dependenses.auth_dependenses import get_current_user
 from server.app import schemas
@@ -35,12 +36,38 @@ async def create_course(
 
 @router.get("/", response_model=List[schemas.Course])
 async def read_courses(
+    search: str | None = None,
+    category_id: int | None = None,
+    min_price: float | None = None,
+    max_price: float | None = None,
     skip: int = 0,
     limit: int = 100,
-    session: AsyncSession = Depends(get_db)
+    session: AsyncSession = Depends(get_db),
 ):
-    courses_list = await crud_courses.get_courses(session)
-    return courses_list[skip:skip + limit]
+    stmt = select(models.Course)
+
+    filters = []
+
+    if search:
+        filters.append(models.Course.title.ilike(f"%{search}%"))
+
+    if category_id:
+        filters.append(models.Course.category_id == category_id)
+
+    if min_price is not None:
+        filters.append(models.Course.price >= min_price)
+
+    if max_price is not None:
+        filters.append(models.Course.price <= max_price)
+
+    if filters:
+        stmt = stmt.where(and_(*filters))
+
+    stmt = stmt.offset(skip).limit(limit)
+
+    result = await session.execute(stmt)
+    return result.scalars().all()
+
 
 @router.post("/my", response_model=schemas.Course)
 async def create_my_course(
