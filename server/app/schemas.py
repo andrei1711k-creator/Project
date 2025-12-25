@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr
@@ -85,7 +85,8 @@ class CourseUpdatePartial(BaseModel):
     duration_hours: Optional[int] = None
     rating: Optional[float] = None
     category_id: Optional[int] = None
-    image_url : str
+    image_url: Optional[str] = None
+
 
 class Course(CourseBase):
     id: int
@@ -100,6 +101,7 @@ class CourseShort(BaseModel):
     id: int
     title: str
     price: int
+    image_url: str  # Добавляем это поле
 
     class Config:
         from_attributes = True
@@ -142,9 +144,19 @@ class BoughtCourseUpdatePartial(BaseModel):
 
 class BoughtCourse(BoughtCourseBase):
     id: int
+    course: Optional['CourseShort'] = None  # Теперь содержит image_url
+    
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
+
+class BoughtCourseDetail(BaseModel):
+    """Детальная информация о купленном курсе"""
+    id: int
+    user_id: int
+    course_id: int
+    course: Optional['Course'] = None
+    
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ============================================================

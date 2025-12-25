@@ -17,7 +17,7 @@ export const createMyCourse = (formData) =>
 
 // 🔹 PUT /courses/my/:id (обновление курса)
 export const updateMyCourse = (id, data) =>
-  api.put(`/courses/my/${id}`, data).then(res => res.data);
+  api.patch(`/courses/my/${id}`, data).then(res => res.data);
 
 // 🔹 DELETE /courses/my/:id
 export const deleteMyCourse = (id) =>

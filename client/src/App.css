@@ -1,3 +1,8 @@
+/* globals.css */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
