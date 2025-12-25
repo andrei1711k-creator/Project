@@ -7,10 +7,15 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const login = async (username, password) => {
-    await apiLogin(username, password);
+  const refreshMe = async () => {
     const me = await getMe();
     setUser(me);
+    return me;
+  };
+
+  const login = async (username, password) => {
+    await apiLogin(username, password);
+    await refreshMe();
   };
 
   const logout = async () => {
@@ -19,14 +24,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getMe()
-      .then(setUser)
+    refreshMe()
       .catch(() => setUser(null))
       .finally(() => setLoading(false));
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, refreshMe, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
