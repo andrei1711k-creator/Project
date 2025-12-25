@@ -1,0 +1,142 @@
+/* Общий фон */
+.my-courses {
+  background: #f9fafb;
+  min-height: 100vh;
+  padding: 40px 0;
+}
+
+/* Контейнер */
+.my-courses .container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Заголовок */
+.my-courses h2 {
+  margin-bottom: 24px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* ===== Форма ===== */
+
+.course-form {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+  margin-bottom: 40px;
+}
+
+.course-form h3 {
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+.course-form input,
+.course-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+
+  background: #ffffff;
+  color: #111827;          /* ← цвет вводимого текста */
+}
+
+.course-form input:focus,
+.course-form textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px #2563eb;
+  color: #111827;
+}
+
+
+/* placeholder — светлее */
+.course-form input::placeholder,
+.course-form textarea::placeholder {
+  color: #9ca3af;
+}
+
+
+.course-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.course-form input:focus,
+.course-form textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* Кнопка */
+.primary-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background: #1d4ed8;
+}
+
+/* ===== Список курсов ===== */
+
+.courses-list {
+  display: grid;
+  gap: 24px;
+}
+
+/* Карточка курса */
+.course-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  gap: 20px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+}
+
+.course-card img {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.course-info {
+  flex: 1;
+}
+
+.course-info h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #111827;
+}
+
+/* Кнопка удаления */
+.delete-btn {
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.delete-btn:hover {
+  background: #fee2e2;
+}

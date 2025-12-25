@@ -1,9 +1,11 @@
 import { useAuth } from "../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import "../css/profile.css";
 
 export default function Profile() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -18,7 +20,15 @@ export default function Profile() {
             <p>Username: {user.username}</p>
           </div>
 
-          <button onClick={logout}>Logout</button>
+          <div className="profile-actions">
+            <button onClick={() => navigate("/my-courses")}>
+              My Courses
+            </button>
+
+            <button onClick={logout}>
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </>

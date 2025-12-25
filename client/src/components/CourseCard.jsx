@@ -9,6 +9,8 @@ export default function CourseCard({ course }) {
   const { items, setItems } = useCart();
   const [loading, setLoading] = useState(false);
 
+  const isOwner = user && course.owner_id === user.id;
+
   const isInCart = items.some(
     (item) => item.course?.id === course.id
   );
@@ -61,9 +63,19 @@ export default function CourseCard({ course }) {
 
     <div style={styles.footer}>
       <span>{course.price} ₽</span>
-      <button onClick={handleBuy} disabled={loading || isInCart}>
-        {isInCart ? "В корзине" : loading ? "Добавление..." : "Купить"}
+      <button
+        onClick={handleBuy}
+        disabled={loading || isInCart || isOwner}
+      >
+        {isOwner
+          ? "Ваш курс"
+          : isInCart
+          ? "В корзине"
+          : loading
+          ? "Добавление..."
+          : "Купить"}
       </button>
+
     </div>
   </div>
 );

@@ -38,8 +38,7 @@ class Category(Base):
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
 
     courses = relationship("Course", back_populates="category")
-
-
+    
 class Course(Base):
     __tablename__ = "courses"
 
@@ -49,20 +48,21 @@ class Course(Base):
     description: Mapped[str] = mapped_column(Text)
     price: Mapped[int] = mapped_column(Integer)
     duration_hours: Mapped[int] = mapped_column(Integer)
-    rating: Mapped[float] = mapped_column(Float,default=0)
+    rating: Mapped[float] = mapped_column(Float, default=0)
     purchased_count: Mapped[int] = mapped_column(Integer, default=0)
+
+    owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    owner = relationship("User")
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
     category = relationship("Category", back_populates="courses")
 
     comments = relationship("Comment", back_populates="course")
-    image_url = Column(
-    String,
-    nullable=False,
-    default="/static/images/courses/default.png"
-)
-
-
+    image_url: Mapped[str] = mapped_column(
+        String,
+        nullable=False,
+        default="/static/images/courses/default.png"
+    )
 
 class Cart(Base):
     __tablename__ = "cart"

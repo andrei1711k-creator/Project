@@ -67,7 +67,6 @@ class CourseBase(BaseModel):
     duration_hours: int
     rating: float
     category_id: int
-    image_url : str
 
 
 class CourseCreate(CourseBase):
@@ -90,6 +89,8 @@ class CourseUpdatePartial(BaseModel):
 
 class Course(CourseBase):
     id: int
+    image_url: str
+    owner_id: Optional[int] = None
 
     class Config:
         from_attributes = True
