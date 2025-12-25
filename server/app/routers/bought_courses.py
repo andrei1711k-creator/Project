@@ -1,9 +1,14 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+from sqlalchemy import select
+
 from server.app import schemas
 from server.app.database import async_session_maker
 from server.app.crud import bought_course as crud_bought_courses
+from server.app.dependenses.auth_dependenses import get_current_user
+from server.app import models
 
 router = APIRouter(prefix="/bought-courses", tags=["Bought Courses"])
 
@@ -29,11 +34,72 @@ async def read_bought_course(bought_id: int, session: AsyncSession = Depends(get
     return db_bought_course
 
 
+@router.get("/user/me", response_model=List[schemas.BoughtCourse])
+async def read_my_bought_courses(
+    current_user=Depends(get_current_user),
+    session: AsyncSession = Depends(get_db)
+):
+    stmt = (
+        select(models.BoughtCourse)
+        .where(models.BoughtCourse.user_id == current_user.id)
+        .options(selectinload(models.BoughtCourse.course))
+    )
+    result = await session.execute(stmt)
+    bought_courses = result.scalars().all()
+    
+    response = []
+    for bc in bought_courses:
+        course_short = None
+        if bc.course:
+            course_short = schemas.CourseShort(
+                id=bc.course.id,
+                title=bc.course.title,
+                price=bc.course.price,
+                image_url=bc.course.image_url  # Теперь включаем image_url
+            )
+        
+        response.append(schemas.BoughtCourse(
+            id=bc.id,
+            user_id=bc.user_id,
+            course_id=bc.course_id,
+            course=course_short
+        ))
+    
+    return response
+
+
 @router.get("/user/{user_id}", response_model=List[schemas.BoughtCourse])
 async def read_user_bought_courses(user_id: int, session: AsyncSession = Depends(get_db)):
-    return await crud_bought_courses.get_user_bought_courses(session, user_id)
+    # Аналогичная логика для других пользователей
+    stmt = (
+        select(models.BoughtCourse)
+        .where(models.BoughtCourse.user_id == user_id)
+        .options(selectinload(models.BoughtCourse.course))
+    )
+    result = await session.execute(stmt)
+    bought_courses = result.scalars().all()
+    
+    response = []
+    for bc in bought_courses:
+        course_short = None
+        if bc.course:
+            course_short = schemas.CourseShort(
+                id=bc.course.id,
+                title=bc.course.title,
+                price=bc.course.price
+            )
+        
+        response.append(schemas.BoughtCourse(
+            id=bc.id,
+            user_id=bc.user_id,
+            course_id=bc.course_id,
+            course=course_short
+        ))
+    
+    return response
 
 
+# Остальные методы остаются без изменений
 @router.put("/{bought_id}", response_model=schemas.BoughtCourse)
 async def update_bought_course(
     bought_id: int,

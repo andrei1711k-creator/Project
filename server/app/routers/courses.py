@@ -128,10 +128,10 @@ async def read_course(course_id: int, session: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"Course {course_id} not found")
     return db_course
 
-@router.put("/my/{course_id}", response_model=schemas.Course)
+@router.patch("/my/{course_id}", response_model=schemas.Course)
 async def update_my_course(
     course_id: int,
-    data: schemas.CourseUpdate,
+    data: schemas.CourseUpdatePartial,
     session: AsyncSession = Depends(get_db),
     user: models.User = Depends(get_current_user),
 ):
@@ -140,12 +140,13 @@ async def update_my_course(
     if not course or course.owner_id != user.id:
         raise HTTPException(status_code=403, detail="Forbidden")
 
-    for k, v in data.model_dump().items():
+    for k, v in data.model_dump(exclude_unset=True).items():
         setattr(course, k, v)
 
     await session.commit()
     await session.refresh(course)
     return course
+
 
 @router.delete("/my/{course_id}", status_code=204)
 async def delete_my_course(

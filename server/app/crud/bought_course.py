@@ -1,6 +1,5 @@
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.engine import Result
 from server.app import models, schemas
 
 async def create_bought_course(session: AsyncSession, data: schemas.BoughtCourseCreate) -> models.BoughtCourse:
@@ -19,12 +18,12 @@ async def create_bought_course(session: AsyncSession, data: schemas.BoughtCourse
 
 async def get_bought_course(session: AsyncSession, bought_id: int):
     stmt = select(models.BoughtCourse).where(models.BoughtCourse.id == bought_id)
-    result: Result = await session.execute(stmt)
+    result = await session.execute(stmt)
     return result.scalar_one_or_none()
 
 async def get_user_bought_courses(session: AsyncSession, user_id: int):
     stmt = select(models.BoughtCourse).where(models.BoughtCourse.user_id == user_id)
-    result: Result = await session.execute(stmt)
+    result = await session.execute(stmt)
     return list(result.scalars().all())
 
 async def update_bought_course(
@@ -34,13 +33,13 @@ async def update_bought_course(
     partial: bool = False
 ):
     stmt = select(models.BoughtCourse).where(models.BoughtCourse.id == bought_id)
-    result: Result = await session.execute(stmt)
+    result = await session.execute(stmt)
     db_obj = result.scalar_one_or_none()
 
     if not db_obj:
         return None
 
-    update_data = data.model_dump(exclude_unset=partial)
+    update_data = data.dict(exclude_unset=partial)
 
     for field, value in update_data.items():
         setattr(db_obj, field, value)
