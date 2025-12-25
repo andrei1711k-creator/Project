@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Cart from "./pages/Cart";
+import MyCourses from "./pages/MyCourses";
 
 export default function App() {
   return (
@@ -18,7 +19,14 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-
+            <Route
+              path="/my-courses"
+              element={
+                <ProtectedRoute>
+                  <MyCourses />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/cart"
               element={
@@ -27,7 +35,6 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/profile"
               element={
