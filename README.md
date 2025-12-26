@@ -31,17 +31,15 @@ Project/
 
 Frontend
 
-JavaScript (возможно с React / Vue / Angular — уточни по коду)
-
-HTML, CSS
+JavaScript (React, HTML, CSS)
 
 Backend
 
-Python или JavaScript (Node.js / Express — уточни в папке server/)
+Python 
 
 Тестирование
 
-PyTest / Jest (в зависимости от языка проекта)
+PyTest 
 
 📥 Установка
 
@@ -51,15 +49,16 @@ git clone https://github.com/andrei1711k-creator/Project.git
 cd Project
 
 Установка зависимостей
+(необходимо предварительно установить виртуальное окружение и используемые библиотеки)
 🧩 Frontend
 cd client
 npm install
 
 🚀 Backend
 cd ../server
-npm install      # если backend на Node.js
+npm install     
 # или
-pip install -r requirements.txt   # если backend на Python
+pip install -r requirements.txt   
 
 ▶️ Запуск
 💻 Frontend
@@ -68,7 +67,7 @@ npm start
 
 🖥️ Backend
 cd server
-npm start         # или python main.py / uvicorn app:app --reload
+npm start         # или python main.py 
 
 🧪 Тестирование
 
