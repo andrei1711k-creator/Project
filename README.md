@@ -69,12 +69,12 @@ npm start
 
 🖥️ Backend
 cd server
-npm start         # или python main.py 
+npm start         
 
 🧪 Тестирование
 
 Чтобы запустить все тесты:
 
 cd tests
-pytest            # если тесты на Python
+pytest            
 
