@@ -76,6 +76,4 @@ npm start         # или python main.py / uvicorn app:app --reload
 
 cd tests
 pytest            # если тесты на Python
-# или
-````
 
