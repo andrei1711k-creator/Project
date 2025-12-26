@@ -1,16 +1,15 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer, ForeignKey, Text, DateTime,Float, UniqueConstraint
+from sqlalchemy import String, Integer, ForeignKey, Text, DateTime, Float, UniqueConstraint, Boolean
 from datetime import datetime
 from server.app.db_helper import db_helper
 from server.app.security import verify_password
-from sqlalchemy import Column, String
+
 
 from sqlalchemy.orm import DeclarativeBase
 
+
 class Base(DeclarativeBase):
     pass
-
-
 
 
 class User(Base):
@@ -21,13 +20,12 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     avatar_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
-
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
     comments = relationship("Comment", back_populates="user")
     bought_courses = relationship("BoughtCourse", back_populates="user")
     cart_items = relationship("Cart", back_populates="user")
 
     def verify_password(self, password: str) -> bool:
-
         return verify_password(password, self.hashed_password)
 
 
@@ -38,7 +36,8 @@ class Category(Base):
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
 
     courses = relationship("Course", back_populates="category")
-    
+
+
 class Course(Base):
     __tablename__ = "courses"
 
@@ -64,6 +63,7 @@ class Course(Base):
         default="/static/images/courses/default.png"
     )
 
+
 class Cart(Base):
     __tablename__ = "cart"
 
@@ -74,10 +74,9 @@ class Cart(Base):
     user = relationship("User", back_populates="cart_items")
     course = relationship("Course")
 
-    __table_args__ = (
+    table_args = (
         UniqueConstraint("user_id", "course_id", name="uq_user_course_cart"),
     )
-
 
 
 class BoughtCourse(Base):
@@ -91,7 +90,6 @@ class BoughtCourse(Base):
     course = relationship("Course")
 
 
-
 class Comment(Base):
     __tablename__ = "comments"
 
@@ -100,7 +98,7 @@ class Comment(Base):
     course_id: Mapped[int] = mapped_column(ForeignKey("courses.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     content: Mapped[str] = mapped_column(Text)
-    rating: Mapped[float] = mapped_column(Float,default=0)
+    rating: Mapped[float] = mapped_column(Float, default=0)
 
     user = relationship("User", back_populates="comments")
     course = relationship("Course", back_populates="comments")

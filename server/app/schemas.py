@@ -1,26 +1,22 @@
-from pydantic import BaseModel, ConfigDict, EmailStr
-from typing import Optional
-
 from pydantic import BaseModel, EmailStr
 from typing import Optional
-
 
 class UserBase(BaseModel):
     username: str
     email: EmailStr
+    avatar_url: Optional[str] = None
 
-
-
-class UserCreate(UserBase):
-    password: str
-
-
-class UserUpdate(BaseModel):
+class UserCreate(BaseModel):
     username: str
     email: EmailStr
     password: str
-    avatar_url: Optional[str] = None
 
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
+    avatar_url: Optional[str] = None
+    is_admin: Optional[bool] = None
 
 class UserUpdatePartial(BaseModel):
     username: Optional[str] = None
@@ -28,30 +24,26 @@ class UserUpdatePartial(BaseModel):
     password: Optional[str] = None
     avatar_url: Optional[str] = None
 
-
 class User(UserBase):
     id: int
-    avatar_url: Optional[str] = None
+    is_admin: bool = False
 
     class Config:
         from_attributes = True
 
+# Остальные схемы остаются как были...
 
 class CategoryBase(BaseModel):
     name: str
 
-
 class CategoryCreate(CategoryBase):
     pass
-
 
 class CategoryUpdate(CategoryBase):
     pass
 
-
 class CategoryUpdatePartial(BaseModel):
     name: Optional[str] = None
-
 
 class Category(CategoryBase):
     id: int
@@ -68,14 +60,11 @@ class CourseBase(BaseModel):
     rating: float
     category_id: int
 
-
 class CourseCreate(CourseBase):
     pass
 
-
 class CourseUpdate(CourseBase):
     pass
-
 
 class CourseUpdatePartial(BaseModel):
     title: Optional[str] = None
@@ -87,7 +76,6 @@ class CourseUpdatePartial(BaseModel):
     category_id: Optional[int] = None
     image_url: Optional[str] = None
 
-
 class Course(CourseBase):
     id: int
     image_url: str
@@ -96,72 +84,49 @@ class Course(CourseBase):
     class Config:
         from_attributes = True
 
-
 class CourseShort(BaseModel):
     id: int
     title: str
     price: int
-    image_url: str  # Добавляем это поле
 
     class Config:
         from_attributes = True
-
 
 # ================== CART ==================
 
 class CartCreate(BaseModel):
     course_id: int
 
-
 class Cart(BaseModel):
     id: int
-    course: CourseShort  # 🔥 возвращаем данные курса
+    course: CourseShort
 
     class Config:
         from_attributes = True
 
-# ============================================================
 # ===================== BOUGHT COURSE =========================
-# ============================================================
 
 class BoughtCourseBase(BaseModel):
     user_id: int
     course_id: int
 
-
 class BoughtCourseCreate(BoughtCourseBase):
     pass
 
-
 class BoughtCourseUpdate(BoughtCourseBase):
     pass
-
 
 class BoughtCourseUpdatePartial(BaseModel):
     user_id: Optional[int] = None
     course_id: Optional[int] = None
 
-
 class BoughtCourse(BoughtCourseBase):
     id: int
-    course: Optional['CourseShort'] = None  # Теперь содержит image_url
-    
-    model_config = ConfigDict(from_attributes=True)
 
+    class Config:
+        from_attributes = True
 
-class BoughtCourseDetail(BaseModel):
-    """Детальная информация о купленном курсе"""
-    id: int
-    user_id: int
-    course_id: int
-    course: Optional['Course'] = None
-    
-    model_config = ConfigDict(from_attributes=True)
-
-
-# ============================================================
 # ======================= COMMENT =============================
-# ============================================================
 
 class CommentBase(BaseModel):
     user_id: int
@@ -169,14 +134,11 @@ class CommentBase(BaseModel):
     content: str
     rating: int
 
-
 class CommentCreate(CommentBase):
     pass
 
-
 class CommentUpdate(CommentBase):
     pass
-
 
 class CommentUpdatePartial(BaseModel):
     user_id: Optional[int] = None
@@ -184,36 +146,30 @@ class CommentUpdatePartial(BaseModel):
     content: Optional[str] = None
     rating: Optional[int] = None
 
-
 class Comment(CommentBase):
     id: int
 
     class Config:
         from_attributes = True
 
-
-
-from pydantic import BaseModel, EmailStr
-
+# ======================= AUTH =============================
 
 class UserRegister(BaseModel):
     username: str
     email: EmailStr
     password: str
 
-
 class UserLogin(BaseModel):
     username: str
     password: str
 
-
 class UserOut(BaseModel):
     id: int
     username: str
+    is_admin: bool = False
 
     class Config:
         from_attributes = True
-
 
 class Token(BaseModel):
     access_token: str
